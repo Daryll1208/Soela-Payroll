@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payroll — Suriname</title>
+<style>
+  :root{
+    --ink: #17261f;
+    --paper: #faf9f5;
+    --paper-raised: #ffffff;
+    --green-deep: #1b4332;
+    --green-mid: #2d6a4f;
+    --green-soft: #e8f0ea;
+    --gold: #b8902e;
+    --gold-soft: #f3e9d2;
+    --red-line: #9b2c2c;
+    --line: #dcd8ce;
+    --muted: #6b7268;
+    --radius: 10px;
+    --shadow: 0 1px 2px rgba(23,38,31,0.06), 0 4px 14px rgba(23,38,31,0.05);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .num, .amount, table.data td.num{
+    font-variant-numeric: tabular-nums;
+    font-family: 'Consolas', 'SFMono-Regular', ui-monospace, Menlo, monospace;
+  }
+  header.app-header{
+    background: linear-gradient(135deg, var(--green-deep), var(--green-mid));
+    color: #f4f1e6;
+    padding: 22px 28px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+    border-bottom: 3px solid var(--gold);
+  }
+  header.app-header .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  header.app-header .star{
+    width:34px;height:34px;
+    color: var(--gold);
+    flex-shrink:0;
+  }
+  header.app-header h1{
+    font-size:19px;
+    margin:0;
+    font-weight:700;
+    letter-spacing:0.2px;
+  }
+  header.app-header .sub{
+    font-size:12.5px;
+    color:#d9e5dc;
+    margin-top:2px;
+  }
+  .lang-toggle{
+    display:flex;
+    border:1px solid rgba(244,241,230,0.4);
+    border-radius:7px;
+    overflow:hidden;
+  }
+  .lang-toggle button{
+    border:none;
+    background:transparent;
+    color:#f4f1e6;
+    padding:7px 12px;
+    font-size:12.5px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .lang-toggle button.active{
+    background:var(--gold);
+    color:#2b210a;
+  }
+  nav.tabs{
+    display:flex;
+    gap:4px;
+    padding: 0 28px;
+    background:var(--paper-raised);
+    border-bottom:1px solid var(--line);
+    overflow-x:auto;
+  }
+  nav.tabs button{
+    border:none;
+    background:transparent;
+    padding:14px 16px;
+    font-size:14px;
+    font-weight:600;
+    color:var(--muted);
+    cursor:pointer;
+    border-bottom:3px solid transparent;
+    white-space:nowrap;
+  }
+  nav.tabs button.active{
+    color:var(--green-deep);
+    border-bottom-color:var(--gold);
+  }
+  main{
+    max-width:1100px;
+    margin:0 auto;
+    padding:24px 28px 80px;
+  }
+  .panel{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:20px;
+    margin-bottom:20px;
+  }
+  .panel h2{
+    font-size:15px;
+    margin:0 0 4px;
+    color:var(--green-deep);
+  }
+  .panel .hint{
+    font-size:12.5px;
+    color:var(--muted);
+    margin:0 0 16px;
+  }
+  .row{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+    flex:1;
+    min-width:160px;
+  }
+  .field label{
+    font-size:12px;
+    font-weight:600;
+    color:var(--muted);
+  }
+  .field input, .field select{
+    padding:9px 10px;
+    border:1px solid var(--line);
+    border-radius:7px;
+    font-size:14px;
+    background:#fff;
+    color:var(--ink);
+    font-family:inherit;
+  }
+  .field input:focus, .field select:focus{
+    outline:2px solid var(--green-mid);
+    outline-offset:1px;
+  }
+  .field .note{
+    font-size:11px;
+    color:var(--muted);
+  }
+  table.data{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13.5px;
+  }
+  table.data th{
+    text-align:left;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    color:var(--muted);
+    border-bottom:2px solid var(--line);
+    padding:8px 10px;
+    white-space:nowrap;
+  }
+  table.data td{
+    padding:9px 10px;
+    border-bottom:1px solid var(--line);
+    vertical-align:middle;
+  }
+  table.data td.num{ text-align:right; }
+  table.data tr:hover{ background:var(--green-soft); }
+  .btn{
+    border:none;
+    border-radius:7px;
+    padding:9px 15px;
+    font-size:13.5px;
+    font-weight:600;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .btn-primary{ background:var(--green-deep); color:#fff; }
+  .btn-primary:hover{ background:var(--green-mid); }
+  .btn-gold{ background:var(--gold); color:#2b210a; }
+  .btn-gold:hover{ filter:brightness(1.06); }
+  .btn-ghost{ background:transparent; color:var(--green-deep); border:1px solid var(--line); }
+  .btn-ghost:hover{ background:var(--green-soft); }
+  .btn-danger{ background:transparent; color:var(--red-line); border:1px solid transparent; }
+  .btn-danger:hover{ text-decoration:underline; }
+  .btn-sm{ padding:5px 9px; font-size:12px; }
+  .toolbar{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
+  }
+  .summary-cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;
+    margin-bottom:20px;
+  }
+  .card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:14px 16px;
+    box-shadow:var(--shadow);
+  }
+  .card .label{
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    color:var(--muted);
+    margin-bottom:6px;
+  }
+  .card .value{
+    font-size:21px;
+    font-weight:700;
+    color:var(--green-deep);
+    font-family:'Consolas', ui-monospace, monospace;
+  }
+  .card.gold .value{ color:#8a6a1c; }
+  .bracket-table{ margin-top:10px; }
+  .payslip-list{ display:flex; flex-direction:column; gap:8px; }
+  .payslip-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 14px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:#fff;
+    cursor:pointer;
+  }
+  .payslip-row .name{ font-weight:600; }
+  .payslip-row .amount{ color:var(--green-deep); font-weight:700; }
+  .empty-state{
+    text-align:center;
+    padding:40px 20px;
+    color:var(--muted);
+  }
+  .empty-state .glyph{ font-size:34px; margin-bottom:8px; }
+  footer.foot{
+    text-align:center;
+    padding:24px;
+    font-size:11.5px;
+    color:var(--muted);
+  }
+  .badge{
+    display:inline-block;
+    font-size:10.5px;
+    font-weight:700;
+    padding:2px 7px;
+    border-radius:20px;
+    background:var(--gold-soft);
+    color:#8a6a1c;
+    margin-left:6px;
+    vertical-align:middle;
+  }
+  .disclaimer{
+    background:var(--gold-soft);
+    border:1px solid #e6d4a3;
+    border-radius:8px;
+    padding:12px 14px;
+    font-size:12.5px;
+    color:#5c4a1a;
+    line-height:1.5;
+    margin-bottom:20px;
+  }
+  .disclaimer b{ color:#4a3a14; }
+
+  /* Employee cards */
+  .emp-card{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px;
+    margin-bottom:14px;
+    background:#fffdf9;
+  }
+  .emp-card-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+    gap:10px;
+  }
+  .emp-card-head .name-field{
+    flex:1;
+  }
+  .emp-card-head input.emp-name{
+    font-size:16px;
+    font-weight:700;
+    border:1px solid transparent;
+    background:transparent;
+    padding:4px 6px;
+    border-radius:6px;
+    width:100%;
+    color:var(--green-deep);
+    font-family:inherit;
+  }
+  .emp-card-head input.emp-name:hover{ border-color:var(--line); }
+  .emp-card-head input.emp-name:focus{ outline:none; border-color:var(--green-mid); background:#fff; }
+  .emp-section-label{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    color:var(--muted);
+    margin:12px 0 8px;
+  }
+  .emp-section-label:first-of-type{ margin-top:0; }
+  .emp-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
+    gap:10px;
+  }
+  .emp-grid .field label{ font-size:11px; }
+  .emp-grid .field input, .emp-grid .field select{ padding:7px 9px; font-size:13px; }
+
+  /* Payslip modal / print */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(23,38,31,0.45);
+    display:flex; align-items:flex-start; justify-content:center;
+    padding:40px 16px;
+    overflow:auto;
+    z-index:50;
+  }
+  .overlay.hidden{ display:none; }
+  .slip{
+    background:#fff;
+    width:100%;
+    max-width:560px;
+    border-radius:10px;
+    padding:32px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.3);
+  }
+  .slip-head{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    border-bottom:3px solid var(--gold);
+    padding-bottom:14px;
+    margin-bottom:16px;
+  }
+  .slip-head h2{ margin:0; font-size:18px; color:var(--green-deep); }
+  .slip-head .co{ font-size:13px; color:var(--muted); margin-top:3px; }
+  .slip-head .period{ text-align:right; font-size:13px; color:var(--muted); }
+  .slip-section{ margin-bottom:14px; }
+  .slip-section h4{
+    font-size:11px; text-transform:uppercase; letter-spacing:0.04em;
+    color:var(--muted); margin:0 0 8px;
+  }
+  .slip-line{
+    display:flex; justify-content:space-between;
+    padding:5px 0;
+    font-size:13.5px;
+    border-bottom:1px dashed var(--line);
+  }
+  .slip-line.total{
+    border-bottom:none;
+    border-top:2px solid var(--ink);
+    margin-top:6px;
+    padding-top:10px;
+    font-weight:700;
+    font-size:15px;
+  }
+  .slip-line .amt{ font-family:'Consolas', ui-monospace, monospace; }
+  .slip-actions{ display:flex; gap:8px; margin-top:20px; }
+  @media print{
+    body *{ visibility:hidden; }
+    .slip, .slip *{ visibility:visible; }
+    .slip{ position:absolute; top:0; left:0; box-shadow:none; max-width:100%; }
+    .slip-actions{ display:none; }
+    .overlay{ position:static; padding:0; background:none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="brand">
+    <svg class="star" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 14.7,9.1 22,9.6 16.3,14.3 18.2,21.4 12,17.3 5.8,21.4 7.7,14.3 2,9.6 9.3,9.1"/></svg>
+    <div>
+      <h1 id="companyHeading">Payroll</h1>
+      <div class="sub" id="companySub">Monthly wage &amp; tax calculator — Suriname</div>
+    </div>
+  </div>
+  <div class="row" style="gap:10px; align-items:center;">
+    <div class="lang-toggle">
+      <button id="langEN" onclick="setLang('en')">EN</button>
+      <button id="langNL" onclick="setLang('nl')">NL</button>
+    </div>
+    <button class="btn btn-ghost btn-sm" id="btnSave" onclick="exportData()"></button>
+    <label class="btn btn-ghost btn-sm" style="cursor:pointer;" id="btnLoadLabel">
+      <input type="file" accept="application/json" style="display:none" onchange="importData(event)">
+    </label>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="run" id="navRun"></button>
+  <button class="tab-btn" data-tab="employees" id="navEmployees"></button>
+  <button class="tab-btn" data-tab="settings" id="navSettings"></button>
+  <button class="tab-btn" data-tab="about" id="navAbout"></button>
+</nav>
+
+<main>
+
+  <div class="disclaimer" id="disclaimerText"></div>
+
+  <!-- ============ PAYROLL RUN TAB ============ -->
+  <section id="tab-run" class="tab-panel">
+    <div class="panel">
+      <h2 id="periodTitle"></h2>
+      <p class="hint" id="periodHint"></p>
+      <div class="row">
+        <div class="field">
+          <label id="lblCompanyName"></label>
+          <input id="companyName" type="text" oninput="onCompanyNameChange()">
+        </div>
+        <div class="field">
+          <label id="lblPayPeriod"></label>
+          <input id="payPeriod" type="month" oninput="renderAll()">
+        </div>
+      </div>
+    </div>
+
+    <div id="summaryCards" class="summary-cards"></div>
+
+    <div class="panel">
+      <div class="toolbar" style="justify-content:space-between;">
+        <h2 style="margin:0;" id="payrollTableTitle"></h2>
+        <div class="row" style="gap:8px;">
+          <button class="btn btn-ghost btn-sm" id="btnExportCSV" onclick="exportCSV()"></button>
+        </div>
+      </div>
+      <p class="hint" id="payrollTableHint"></p>
+      <div id="runTableWrap"></div>
+    </div>
+
+    <div class="panel">
+      <h2 id="payslipsTitle"></h2>
+      <p class="hint" id="payslipsHint"></p>
+      <div id="payslipList" class="payslip-list"></div>
+    </div>
+  </section>
+
+  <!-- ============ EMPLOYEES TAB ============ -->
+  <section id="tab-employees" class="tab-panel" style="display:none;">
+    <div class="panel">
+      <div class="toolbar" style="justify-content:space-between;">
+        <h2 style="margin:0;" id="employeesTitle"></h2>
+        <button class="btn btn-primary btn-sm" id="btnAddEmployee" onclick="addEmployee()"></button>
+      </div>
+      <p class="hint" id="employeesHint"></p>
+      <div id="employeeCardsWrap"></div>
+    </div>
+  </section>
+
+  <!-- ============ SETTINGS TAB ============ -->
+  <section id="tab-settings" class="tab-panel" style="display:none;">
+    <div class="panel">
+      <h2 id="wageTaxTitle"></h2>
+      <p class="hint" id="wageTaxHint"></p>
+      <div class="row">
+        <div class="field"><label id="lblTaxFree"></label><input id="taxFreeAllowance" class="num" type="number" step="1" oninput="renderAll()"></div>
+        <div class="field"><label id="lblProfExpense"></label><input id="profExpense" class="num" type="number" step="1" oninput="renderAll()"></div>
+      </div>
+      <table class="data bracket-table">
+        <thead><tr><th id="bracketColHead"></th><th id="rateColHead"></th></tr></thead>
+        <tbody id="bracketBody"></tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <h2 id="ssTitle"></h2>
+      <p class="hint" id="ssHint"></p>
+      <div class="row">
+        <div class="field">
+          <label id="lblAOV"></label>
+          <input id="rateAOV" class="num" type="number" step="0.1" oninput="renderAll()">
+          <span class="note" id="noteAOV"></span>
+        </div>
+        <div class="field">
+          <label id="lblSZF"></label>
+          <input id="rateSZF" class="num" type="number" step="0.1" oninput="renderAll()">
+          <span class="note" id="noteSZF"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT TAB ============ -->
+  <section id="tab-about" class="tab-panel" style="display:none;">
+    <div class="panel">
+      <h2 id="aboutCalcTitle"></h2>
+      <ol id="aboutCalcList" style="font-size:13.5px; line-height:1.9; color:var(--ink);"></ol>
+    </div>
+    <div class="panel">
+      <h2 id="aboutWhatTitle"></h2>
+      <p id="aboutWhatText" style="font-size:13.5px; line-height:1.7;"></p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot" id="footerText"></footer>
+
+<div id="slipOverlay" class="overlay hidden" onclick="if(event.target===this) closeSlip()">
+  <div class="slip" id="slipContent"></div>
+</div>
+
+<script>
+// ---------- Translations ----------
+const I18N = {
+  en: {
+    appTitle: "Payroll",
+    appSub: "Monthly wage & tax calculator — Suriname",
+    saveFile: "⭳ Save file",
+    loadFile: "⭱ Load file",
+    navRun: "Payroll run",
+    navEmployees: "Employees",
+    navSettings: "Tax & contribution settings",
+    navAbout: "About the numbers",
+    disclaimer: "<b>Before running real payroll:</b> wage tax brackets below reflect Suriname's 2026 Loonbelasting table (SRD 108,000/year tax-free, progressive 8–38%). Social security rates (AOV/SZF) are editable estimates — confirm current employer/employee split with SVB and Belastingdienst Suriname, since these change periodically. This tool doesn't file anything for you; it only calculates and produces payslips.",
+    periodTitle: "Pay period",
+    periodHint: "Set the company name and the month you're running payroll for.",
+    lblCompanyName: "Company / customer name",
+    companyPlaceholder: "e.g. Bakkerij Alberga",
+    lblPayPeriod: "Pay period (month)",
+    payrollTableTitle: "Payroll table",
+    exportCSV: "Export CSV",
+    payrollTableHint: "Net pay updates automatically as you edit gross pay, hours, or deductions. Add employees on the \"Employees\" tab.",
+    payslipsTitle: "Payslips",
+    payslipsHint: "Click an employee to preview and print an individual payslip for this period.",
+    employeesTitle: "Employees",
+    addEmployee: "+ Add employee",
+    employeesHint: "Choose \"Monthly salary\" for fixed pay, or \"Hourly\" to pay by hours worked this period. All amounts in SRD.",
+    wageTaxTitle: "Wage tax (Loonbelasting) — monthly brackets",
+    wageTaxHint: "Applied to income remaining after the tax-free allowance and professional expense deduction below. Source: Wage Tax Act tables, 2026.",
+    lblTaxFree: "Tax-free monthly allowance (SRD)",
+    lblProfExpense: "Professional expense deduction (SRD/month)",
+    bracketColHead: "Bracket (monthly, after allowance)",
+    rateColHead: "Rate",
+    bracketRows: [["Up to SRD 3,500","8%"],["SRD 3,500 – 7,000","18%"],["SRD 7,000 – 10,500","28%"],["Above SRD 10,500","38%"]],
+    ssTitle: "Social security contributions",
+    ssBadge: "verify rates",
+    ssHint: "Employee-side contributions are withheld from gross pay before tax is calculated. Confirm current rates with SVB before going live.",
+    lblAOV: "AOV (old-age pension) — employee %",
+    noteAOV: "Commonly cited around 4% — confirm with SVB.",
+    lblSZF: "SZF / health insurance — employee %",
+    noteSZF: "Set to 0 if fully employer-paid for this customer.",
+    aboutCalcTitle: "How each payslip is calculated",
+    aboutCalcList: [
+      "<b>Gross pay</b> — monthly salary, or hours worked × hourly rate, plus any extra allowances entered.",
+      "<b>Employee social security</b> — AOV % and SZF % (set in Settings) applied to gross pay, withheld.",
+      "<b>Taxable income</b> — gross pay minus social security minus the professional expense deduction minus the tax-free monthly allowance.",
+      "<b>Wage tax</b> — the 2026 progressive brackets (8/18/28/38%) applied to taxable income.",
+      "<b>Net pay</b> — gross pay minus social security minus wage tax minus any other deductions (e.g. advances), plus non-taxable additions."
+    ],
+    aboutWhatTitle: "What this tool is — and isn't",
+    aboutWhatText: "It's a calculator and payslip generator you and your customer own outright — no logins, no subscription, no usage limits. It does <b>not</b> file wage tax or social security returns with Belastingdienst Suriname or SVB; those still need to be submitted separately each month. Keep the JSON backup file safe — it's the only copy of this payroll data, since nothing is stored on a server.",
+    footerText: "Runs entirely in your browser. No data leaves this device.",
+    emptyRun: "Add employees on the \"Employees\" tab to see payroll here.",
+    emptyEmployees: "No employees yet. Click \"Add employee\" to start.",
+    emptyPayslips: "No payslips yet — add employees first.",
+    colEmployee: "Employee", colGross: "Gross", colSS: "Soc. security", colTaxable: "Taxable income", colTax: "Wage tax", colOther: "Other ded.", colNet: "Net pay",
+    cardEmployees: "Employees", cardTotalGross: "Total gross", cardTaxWithheld: "Wage tax withheld", cardSSWithheld: "Social security withheld", cardTotalNet: "Total net pay",
+    secPersonal: "Personal information", secPay: "Pay details",
+    fName: "Full name", fPosition: "Position", fType: "Employment type", fNationality: "Nationality", fAddress: "Address", fPhone: "Phone number", fDOB: "Date of birth", fIDNumber: "ID number",
+    typeOptions: [["permanent","Permanent"],["temporary","Temporary"],["parttime","Part-time"],["contract","Contract"]],
+    fPaymentMethod: "Payment method", paymentMethodOptions: [["bank","Bank transfer"],["cash","Cash"]],
+    fBankName: "Bank name", fBankAccount: "Bank account number",
+    fPayType: "Pay type", payTypeMonthly: "Monthly salary", payTypeHourly: "Hourly", fSalaryRate: "Salary / Rate", fHours: "Hours worked", fExtraAllowance: "Extra allowance", fOtherDeduction: "Other deduction",
+    btnRemove: "Remove",
+    slipEarnings: "Earnings", slipMonthlySalary: "Monthly salary", slipHourly: "Hourly", slipAdditionalAllowance: "Additional allowance", slipGrossPay: "Gross pay",
+    slipDeductions: "Deductions", slipWageTaxOn: "Wage tax (on taxable income", slipOtherDeduction: "Other deduction", slipNetPay: "Net pay",
+    slipID: "ID", slipPayslip: "Payslip",
+    btnPrint: "Print / Save as PDF", btnClose: "Close",
+    unnamed: "Unnamed employee", unnamedShort: "Unnamed",
+    importError: "Could not read that file — make sure it is a payroll JSON file saved by this app.",
+    localeCode: "en-US"
+  },
+  nl: {
+    appTitle: "Loonadministratie",
+    appSub: "Maandelijkse loon- en belastingcalculator — Suriname",
+    saveFile: "⭳ Bestand opslaan",
+    loadFile: "⭱ Bestand laden",
+    navRun: "Loonrun",
+    navEmployees: "Werknemers",
+    navSettings: "Belasting- en premie-instellingen",
+    navAbout: "Over de berekening",
+    disclaimer: "<b>Voordat u echte loonlijsten verwerkt:</b> onderstaande loonbelastingschijven volgen de Surinaamse loonbelastingtabel van 2026 (SRD 108.000/jaar belastingvrij, progressief 8–38%). Premiepercentages (AOV/SZF) zijn aanpasbare schattingen — controleer de actuele werkgevers-/werknemersverdeling bij de SVB en de Belastingdienst Suriname, aangezien deze regelmatig wijzigen. Deze tool doet geen aangiftes voor u; hij berekent alleen en maakt loonstroken.",
+    periodTitle: "Loonperiode",
+    periodHint: "Stel de bedrijfsnaam en de maand in waarvoor u de loonlijst verwerkt.",
+    lblCompanyName: "Bedrijfs-/klantnaam",
+    companyPlaceholder: "bijv. Bakkerij Alberga",
+    lblPayPeriod: "Loonperiode (maand)",
+    payrollTableTitle: "Loontabel",
+    exportCSV: "Exporteer CSV",
+    payrollTableHint: "Het nettoloon wordt automatisch bijgewerkt zodra u het brutoloon, de uren of inhoudingen wijzigt. Voeg werknemers toe op het tabblad \"Werknemers\".",
+    payslipsTitle: "Loonstroken",
+    payslipsHint: "Klik op een werknemer om een individuele loonstrook voor deze periode te bekijken en af te drukken.",
+    employeesTitle: "Werknemers",
+    addEmployee: "+ Werknemer toevoegen",
+    employeesHint: "Kies \"Maandloon\" voor een vast salaris, of \"Uurloon\" om te betalen op basis van gewerkte uren deze periode. Alle bedragen in SRD.",
+    wageTaxTitle: "Loonbelasting — maandelijkse schijven",
+    wageTaxHint: "Wordt toegepast op het inkomen dat overblijft na de belastingvrije som en de aftrek beroepskosten hieronder. Bron: Wet Loonbelasting tabellen, 2026.",
+    lblTaxFree: "Belastingvrije som per maand (SRD)",
+    lblProfExpense: "Aftrek beroepskosten (SRD/maand)",
+    bracketColHead: "Schijf (per maand, na belastingvrije som)",
+    rateColHead: "Tarief",
+    bracketRows: [["Tot SRD 3.500","8%"],["SRD 3.500 – 7.000","18%"],["SRD 7.000 – 10.500","28%"],["Boven SRD 10.500","38%"]],
+    ssTitle: "Premies volksverzekeringen",
+    ssBadge: "controleer tarieven",
+    ssHint: "Werknemerspremies worden ingehouden op het brutoloon vóórdat de belasting wordt berekend. Controleer de actuele tarieven bij de SVB voordat u live gaat.",
+    lblAOV: "AOV (ouderdomsvoorziening) — werknemer %",
+    noteAOV: "Vaak rond 4% — controleer bij de SVB.",
+    lblSZF: "SZF / ziektekostenverzekering — werknemer %",
+    noteSZF: "Zet op 0 als volledig door de werkgever wordt betaald.",
+    aboutCalcTitle: "Hoe elke loonstrook wordt berekend",
+    aboutCalcList: [
+      "<b>Brutoloon</b> — maandsalaris, of gewerkte uren × uurloon, plus eventuele extra toelagen.",
+      "<b>Werknemerspremies</b> — AOV % en SZF % (ingesteld bij Instellingen) toegepast op het brutoloon, ingehouden.",
+      "<b>Belastbaar inkomen</b> — brutoloon minus premies minus de aftrek beroepskosten minus de belastingvrije som per maand.",
+      "<b>Loonbelasting</b> — de progressieve schijven van 2026 (8/18/28/38%) toegepast op het belastbaar inkomen.",
+      "<b>Nettoloon</b> — brutoloon minus premies minus loonbelasting minus overige inhoudingen (bijv. voorschotten), plus onbelaste toevoegingen."
+    ],
+    aboutWhatTitle: "Wat deze tool wel en niet is",
+    aboutWhatText: "Het is een rekentool en loonstrookgenerator die u en uw klant volledig zelf bezitten — geen inlogaccounts, geen abonnement, geen gebruikslimiet. De tool doet <b>geen</b> aangifte loonbelasting of premies bij de Belastingdienst Suriname of de SVB; die moeten nog steeds elke maand apart worden ingediend. Bewaar het JSON-back-upbestand goed — het is de enige kopie van deze loongegevens, aangezien niets op een server wordt opgeslagen.",
+    footerText: "Werkt volledig in uw browser. Er verlaten geen gegevens dit apparaat.",
+    emptyRun: "Voeg werknemers toe op het tabblad \"Werknemers\" om hier de loonlijst te zien.",
+    emptyEmployees: "Nog geen werknemers. Klik op \"Werknemer toevoegen\" om te beginnen.",
+    emptyPayslips: "Nog geen loonstroken — voeg eerst werknemers toe.",
+    colEmployee: "Werknemer", colGross: "Bruto", colSS: "Premies", colTaxable: "Belastbaar inkomen", colTax: "Loonbelasting", colOther: "Overige inh.", colNet: "Nettoloon",
+    cardEmployees: "Werknemers", cardTotalGross: "Totaal bruto", cardTaxWithheld: "Ingehouden loonbelasting", cardSSWithheld: "Ingehouden premies", cardTotalNet: "Totaal nettoloon",
+    secPersonal: "Persoonlijke gegevens", secPay: "Loongegevens",
+    fName: "Volledige naam", fPosition: "Functie", fType: "Type dienstverband", fNationality: "Nationaliteit", fAddress: "Adres", fPhone: "Telefoonnummer", fDOB: "Geboortedatum", fIDNumber: "ID-nummer",
+    typeOptions: [["permanent","Vast"],["temporary","Tijdelijk"],["parttime","Deeltijd"],["contract","Contract"]],
+    fPaymentMethod: "Betaalwijze", paymentMethodOptions: [["bank","Bankoverschrijving"],["cash","Contant"]],
+    fBankName: "Naam bank", fBankAccount: "Bankrekeningnummer",
+    fPayType: "Type loon", payTypeMonthly: "Maandloon", payTypeHourly: "Uurloon", fSalaryRate: "Salaris / Tarief", fHours: "Gewerkte uren", fExtraAllowance: "Extra toelage", fOtherDeduction: "Overige inhouding",
+    btnRemove: "Verwijderen",
+    slipEarnings: "Inkomsten", slipMonthlySalary: "Maandsalaris", slipHourly: "Uurloon", slipAdditionalAllowance: "Extra toelage", slipGrossPay: "Brutoloon",
+    slipDeductions: "Inhoudingen", slipWageTaxOn: "Loonbelasting (over belastbaar inkomen", slipOtherDeduction: "Overige inhouding", slipNetPay: "Nettoloon",
+    slipID: "ID", slipPayslip: "Loonstrook",
+    btnPrint: "Afdrukken / Opslaan als PDF", btnClose: "Sluiten",
+    unnamed: "Naamloze werknemer", unnamedShort: "Naamloos",
+    importError: "Dit bestand kon niet worden gelezen — controleer of het een loon-JSON-bestand is dat door deze app is opgeslagen.",
+    localeCode: "nl-NL"
+  }
+};
+let lang = 'en';
+function t(key){ return I18N[lang][key]; }
+
+// ---------- State ----------
+let state = {
+  companyName: "",
+  payPeriod: new Date().toISOString().slice(0,7),
+  settings: {
+    taxFreeAllowance: 9000,
+    profExpense: 400,
+    rateAOV: 4,
+    rateSZF: 0
+  },
+  employees: []
+};
+
+function uid(){ return 'e' + Math.random().toString(36).slice(2,9); }
+
+function newEmployee(){
+  return {
+    id: uid(),
+    name: "",
+    position: "",
+    type: "permanent",
+    nationality: "",
+    address: "",
+    phone: "",
+    dob: "",
+    idNumber: "",
+    paymentMethod: "bank", // cash | bank
+    bankName: "",
+    bankAccount: "",
+    payType: "monthly", // monthly | hourly
+    monthlySalary: 0,
+    hourlyRate: 0,
+    hoursWorked: 0,
+    extraAllowance: 0,
+    otherDeduction: 0
+  };
+}
+
+// ---------- Tax logic ----------
+const BRACKETS = [
+  {upTo: 3500, rate: 0.08},
+  {upTo: 7000, rate: 0.18},
+  {upTo: 10500, rate: 0.28},
+  {upTo: Infinity, rate: 0.38}
+];
+
+function computeWageTax(taxableIncome){
+  if(taxableIncome <= 0) return 0;
+  let tax = 0;
+  let lower = 0;
+  for(const b of BRACKETS){
+    if(taxableIncome > lower){
+      const bandAmount = Math.min(taxableIncome, b.upTo) - lower;
+      tax += bandAmount * b.rate;
+      lower = b.upTo;
+    } else break;
+  }
+  return tax;
+}
+
+function computePayslip(emp){
+  const s = state.settings;
+  const gross = emp.payType === 'monthly'
+    ? Number(emp.monthlySalary || 0)
+    : Number(emp.hourlyRate || 0) * Number(emp.hoursWorked || 0);
+  const grossTotal = gross + Number(emp.extraAllowance || 0);
+
+  const aov = grossTotal * (Number(s.rateAOV || 0) / 100);
+  const szf = grossTotal * (Number(s.rateSZF || 0) / 100);
+  const socialSecurity = aov + szf;
+
+  let taxable = grossTotal - socialSecurity - Number(s.profExpense || 0) - Number(s.taxFreeAllowance || 0);
+  if(taxable < 0) taxable = 0;
+
+  const wageTax = computeWageTax(taxable);
+  const otherDeduction = Number(emp.otherDeduction || 0);
+  const net = grossTotal - socialSecurity - wageTax - otherDeduction;
+
+  return { gross: grossTotal, aov, szf, socialSecurity, taxable, wageTax, otherDeduction, net };
+}
+
+// ---------- Formatting ----------
+function fmt(n){
+  return 'SRD ' + (Number(n)||0).toLocaleString(I18N[lang].localeCode, {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+// ---------- Static text rendering ----------
+function applyStaticText(){
+  document.getElementById('companySub').textContent = t('appSub');
+  document.getElementById('btnSave').textContent = t('saveFile');
+  document.getElementById('btnLoadLabel').innerHTML = t('loadFile') + '<input type="file" accept="application/json" style="display:none" onchange="importData(event)">';
+  document.getElementById('navRun').textContent = t('navRun');
+  document.getElementById('navEmployees').textContent = t('navEmployees');
+  document.getElementById('navSettings').textContent = t('navSettings');
+  document.getElementById('navAbout').textContent = t('navAbout');
+  document.getElementById('disclaimerText').innerHTML = t('disclaimer');
+  document.getElementById('periodTitle').textContent = t('periodTitle');
+  document.getElementById('periodHint').textContent = t('periodHint');
+  document.getElementById('lblCompanyName').textContent = t('lblCompanyName');
+  document.getElementById('companyName').placeholder = t('companyPlaceholder');
+  document.getElementById('lblPayPeriod').textContent = t('lblPayPeriod');
+  document.getElementById('payrollTableTitle').textContent = t('payrollTableTitle');
+  document.getElementById('btnExportCSV').textContent = t('exportCSV');
+  document.getElementById('payrollTableHint').textContent = t('payrollTableHint');
+  document.getElementById('payslipsTitle').textContent = t('payslipsTitle');
+  document.getElementById('payslipsHint').textContent = t('payslipsHint');
+  document.getElementById('employeesTitle').textContent = t('employeesTitle');
+  document.getElementById('btnAddEmployee').textContent = t('addEmployee');
+  document.getElementById('employeesHint').textContent = t('employeesHint');
+  document.getElementById('wageTaxTitle').textContent = t('wageTaxTitle');
+  document.getElementById('wageTaxHint').textContent = t('wageTaxHint');
+  document.getElementById('lblTaxFree').textContent = t('lblTaxFree');
+  document.getElementById('lblProfExpense').textContent = t('lblProfExpense');
+  document.getElementById('bracketColHead').textContent = t('bracketColHead');
+  document.getElementById('rateColHead').textContent = t('rateColHead');
+  document.getElementById('bracketBody').innerHTML = t('bracketRows').map(r=>`<tr><td>${r[0]}</td><td class="num">${r[1]}</td></tr>`).join('');
+  document.getElementById('ssTitle').innerHTML = t('ssTitle') + ` <span class="badge">${t('ssBadge')}</span>`;
+  document.getElementById('ssHint').textContent = t('ssHint');
+  document.getElementById('lblAOV').textContent = t('lblAOV');
+  document.getElementById('noteAOV').textContent = t('noteAOV');
+  document.getElementById('lblSZF').textContent = t('lblSZF');
+  document.getElementById('noteSZF').textContent = t('noteSZF');
+  document.getElementById('aboutCalcTitle').textContent = t('aboutCalcTitle');
+  document.getElementById('aboutCalcList').innerHTML = t('aboutCalcList').map(li=>`<li>${li}</li>`).join('');
+  document.getElementById('aboutWhatTitle').textContent = t('aboutWhatTitle');
+  document.getElementById('aboutWhatText').innerHTML = t('aboutWhatText');
+  document.getElementById('footerText').textContent = t('footerText');
+  document.getElementById('companyHeading').textContent = state.companyName || t('appTitle');
+  document.getElementById('langEN').classList.toggle('active', lang==='en');
+  document.getElementById('langNL').classList.toggle('active', lang==='nl');
+  document.title = t('appTitle') + ' — Suriname';
+}
+
+function setLang(l){
+  lang = l;
+  applyStaticText();
+  renderAll();
+}
+
+// ---------- Rendering ----------
+function renderAll(){
+  saveSettingsFromInputs();
+  renderSummary();
+  renderRunTable();
+  renderEmployeeCards();
+  renderPayslipList();
+}
+
+function saveSettingsFromInputs(){
+  state.companyName = document.getElementById('companyName').value;
+  state.payPeriod = document.getElementById('payPeriod').value || state.payPeriod;
+  state.settings.taxFreeAllowance = Number(document.getElementById('taxFreeAllowance').value || 0);
+  state.settings.profExpense = Number(document.getElementById('profExpense').value || 0);
+  state.settings.rateAOV = Number(document.getElementById('rateAOV').value || 0);
+  state.settings.rateSZF = Number(document.getElementById('rateSZF').value || 0);
+}
+
+function onCompanyNameChange(){
+  state.companyName = document.getElementById('companyName').value;
+  document.getElementById('companyHeading').textContent = state.companyName || t('appTitle');
+}
+
+function renderSummary(){
+  const cards = document.getElementById('summaryCards');
+  let totalGross=0, totalTax=0, totalSS=0, totalNet=0;
+  state.employees.forEach(emp=>{
+    const p = computePayslip(emp);
+    totalGross += p.gross; totalTax += p.wageTax; totalSS += p.socialSecurity; totalNet += p.net;
+  });
+  cards.innerHTML = `
+    <div class="card"><div class="label">${t('cardEmployees')}</div><div class="value">${state.employees.length}</div></div>
+    <div class="card"><div class="label">${t('cardTotalGross')}</div><div class="value">${fmt(totalGross)}</div></div>
+    <div class="card gold"><div class="label">${t('cardTaxWithheld')}</div><div class="value">${fmt(totalTax)}</div></div>
+    <div class="card"><div class="label">${t('cardSSWithheld')}</div><div class="value">${fmt(totalSS)}</div></div>
+    <div class="card"><div class="label">${t('cardTotalNet')}</div><div class="value">${fmt(totalNet)}</div></div>
+  `;
+}
+
+function renderRunTable(){
+  const wrap = document.getElementById('runTableWrap');
+  if(state.employees.length === 0){
+    wrap.innerHTML = `<div class="empty-state"><div class="glyph">🧾</div>${t('emptyRun')}</div>`;
+    return;
+  }
+  let rows = state.employees.map(emp=>{
+    const p = computePayslip(emp);
+    return `<tr>
+      <td>${emp.name || `<em>${t('unnamedShort')}</em>`}</td>
+      <td class="num">${fmt(p.gross)}</td>
+      <td class="num">${fmt(p.socialSecurity)}</td>
+      <td class="num">${fmt(p.taxable)}</td>
+      <td class="num">${fmt(p.wageTax)}</td>
+      <td class="num">${fmt(p.otherDeduction)}</td>
+      <td class="num" style="font-weight:700;color:var(--green-deep);">${fmt(p.net)}</td>
+    </tr>`;
+  }).join('');
+  wrap.innerHTML = `<div style="overflow-x:auto;"><table class="data">
+    <thead><tr>
+      <th>${t('colEmployee')}</th><th>${t('colGross')}</th><th>${t('colSS')}</th><th>${t('colTaxable')}</th><th>${t('colTax')}</th><th>${t('colOther')}</th><th>${t('colNet')}</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table></div>`;
+}
+
+function renderEmployeeCards(){
+  const wrap = document.getElementById('employeeCardsWrap');
+  if(state.employees.length === 0){
+    wrap.innerHTML = `<div class="empty-state"><div class="glyph">👤</div>${t('emptyEmployees')}</div>`;
+    return;
+  }
+  wrap.innerHTML = state.employees.map(emp=>{
+    const isMonthly = emp.payType === 'monthly';
+    const typeOpts = t('typeOptions').map(([val,label])=>`<option value="${val}" ${emp.type===val?'selected':''}>${label}</option>`).join('');
+    return `<div class="emp-card">
+      <div class="emp-card-head">
+        <div class="name-field">
+          <input class="emp-name" type="text" value="${escapeAttr(emp.name)}" placeholder="${t('fName')}" oninput="updateEmp('${emp.id}','name',this.value)">
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="removeEmployee('${emp.id}')">${t('btnRemove')}</button>
+      </div>
+
+      <div class="emp-section-label">${t('secPersonal')}</div>
+      <div class="emp-grid">
+        <div class="field"><label>${t('fPosition')}</label><input type="text" value="${escapeAttr(emp.position)}" oninput="updateEmp('${emp.id}','position',this.value)"></div>
+        <div class="field"><label>${t('fType')}</label><select onchange="updateEmp('${emp.id}','type',this.value)">${typeOpts}</select></div>
+        <div class="field"><label>${t('fNationality')}</label><input type="text" value="${escapeAttr(emp.nationality)}" oninput="updateEmp('${emp.id}','nationality',this.value)"></div>
+        <div class="field"><label>${t('fAddress')}</label><input type="text" value="${escapeAttr(emp.address)}" oninput="updateEmp('${emp.id}','address',this.value)"></div>
+        <div class="field"><label>${t('fPhone')}</label><input type="text" value="${escapeAttr(emp.phone)}" oninput="updateEmp('${emp.id}','phone',this.value)"></div>
+        <div class="field"><label>${t('fDOB')}</label><input type="date" value="${escapeAttr(emp.dob)}" oninput="updateEmp('${emp.id}','dob',this.value)"></div>
+        <div class="field"><label>${t('fIDNumber')}</label><input type="text" value="${escapeAttr(emp.idNumber)}" oninput="updateEmp('${emp.id}','idNumber',this.value)"></div>
+      </div>
+
+      <div class="emp-section-label">${t('secPay')}</div>
+      <div class="emp-grid">
+        <div class="field">
+          <label>${t('fPaymentMethod')}</label>
+          <select onchange="updateEmp('${emp.id}','paymentMethod',this.value)">
+            ${t('paymentMethodOptions').map(([val,label])=>`<option value="${val}" ${emp.paymentMethod===val?'selected':''}>${label}</option>`).join('')}
+          </select>
+        </div>
+        ${emp.paymentMethod === 'bank' ? `
+        <div class="field"><label>${t('fBankName')}</label><input type="text" value="${escapeAttr(emp.bankName)}" oninput="updateEmp('${emp.id}','bankName',this.value)"></div>
+        <div class="field"><label>${t('fBankAccount')}</label><input type="text" value="${escapeAttr(emp.bankAccount)}" oninput="updateEmp('${emp.id}','bankAccount',this.value)"></div>
+        ` : ''}
+        <div class="field">
+          <label>${t('fPayType')}</label>
+          <select onchange="updateEmp('${emp.id}','payType',this.value)">
+            <option value="monthly" ${isMonthly?'selected':''}>${t('payTypeMonthly')}</option>
+            <option value="hourly" ${!isMonthly?'selected':''}>${t('payTypeHourly')}</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>${t('fSalaryRate')}</label>
+          ${isMonthly
+            ? `<input class="num" type="number" step="0.01" value="${emp.monthlySalary}" oninput="updateEmp('${emp.id}','monthlySalary',this.value)">`
+            : `<input class="num" type="number" step="0.01" value="${emp.hourlyRate}" oninput="updateEmp('${emp.id}','hourlyRate',this.value)">`}
+        </div>
+        ${!isMonthly ? `<div class="field"><label>${t('fHours')}</label><input class="num" type="number" step="0.5" value="${emp.hoursWorked}" oninput="updateEmp('${emp.id}','hoursWorked',this.value)"></div>` : ''}
+        <div class="field"><label>${t('fExtraAllowance')}</label><input class="num" type="number" step="0.01" value="${emp.extraAllowance}" oninput="updateEmp('${emp.id}','extraAllowance',this.value)"></div>
+        <div class="field"><label>${t('fOtherDeduction')}</label><input class="num" type="number" step="0.01" value="${emp.otherDeduction}" oninput="updateEmp('${emp.id}','otherDeduction',this.value)"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderPayslipList(){
+  const list = document.getElementById('payslipList');
+  if(state.employees.length === 0){
+    list.innerHTML = `<div class="empty-state">${t('emptyPayslips')}</div>`;
+    return;
+  }
+  list.innerHTML = state.employees.map(emp=>{
+    const p = computePayslip(emp);
+    return `<div class="payslip-row" onclick="openSlip('${emp.id}')">
+      <span class="name">${emp.name || t('unnamedShort')}</span>
+      <span class="amount">${fmt(p.net)}</span>
+    </div>`;
+  }).join('');
+}
+
+function escapeAttr(str){
+  return String(str||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+}
+
+// ---------- Mutations ----------
+function addEmployee(){
+  state.employees.push(newEmployee());
+  renderAll();
+  switchTab('employees');
+}
+function removeEmployee(id){
+  state.employees = state.employees.filter(e=>e.id!==id);
+  renderAll();
+}
+function updateEmp(id, field, value){
+  const emp = state.employees.find(e=>e.id===id);
+  if(!emp) return;
+  const numericFields = ['monthlySalary','hourlyRate','hoursWorked','extraAllowance','otherDeduction'];
+  emp[field] = numericFields.includes(field) ? Number(value||0) : value;
+  renderAll();
+}
+
+// ---------- Tabs ----------
+function switchTab(tabId){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===tabId));
+  document.querySelectorAll('.tab-panel').forEach(p=>{
+    p.style.display = (p.id === 'tab-'+tabId) ? 'block' : 'none';
+  });
+}
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>switchTab(btn.dataset.tab));
+});
+
+// ---------- Payslip modal ----------
+function openSlip(id){
+  const emp = state.employees.find(e=>e.id===id);
+  if(!emp) return;
+  const p = computePayslip(emp);
+  const period = state.payPeriod ? new Date(state.payPeriod+'-01').toLocaleDateString(I18N[lang].localeCode,{month:'long', year:'numeric'}) : '';
+  document.getElementById('slipContent').innerHTML = `
+    <div class="slip-head">
+      <div>
+        <h2>${emp.name || t('unnamed')}</h2>
+        <div class="co">${emp.position || ''}</div>
+        <div class="co">${state.companyName || ''}</div>
+        ${emp.idNumber ? `<div class="co">${t('slipID')}: ${escapeAttr(emp.idNumber)}</div>` : ''}
+        ${emp.paymentMethod === 'bank' && emp.bankName ? `<div class="co">${t('fBankName')}: ${escapeAttr(emp.bankName)}${emp.bankAccount ? ' · ' + escapeAttr(emp.bankAccount) : ''}</div>` : ''}
+        ${emp.paymentMethod === 'cash' ? `<div class="co">${t('paymentMethodOptions')[1][1]}</div>` : ''}
+      </div>
+      <div class="period">${period}<br>${t('slipPayslip')}</div>
+    </div>
+    <div class="slip-section">
+      <h4>${t('slipEarnings')}</h4>
+      <div class="slip-line"><span>${emp.payType==='monthly' ? t('slipMonthlySalary') : `${t('slipHourly')} (${emp.hoursWorked} × ${fmt(emp.hourlyRate)})`}</span><span class="amt">${fmt(emp.payType==='monthly'?emp.monthlySalary:emp.hourlyRate*emp.hoursWorked)}</span></div>
+      ${emp.extraAllowance ? `<div class="slip-line"><span>${t('slipAdditionalAllowance')}</span><span class="amt">${fmt(emp.extraAllowance)}</span></div>` : ''}
+      <div class="slip-line"><span>${t('slipGrossPay')}</span><span class="amt">${fmt(p.gross)}</span></div>
+    </div>
+    <div class="slip-section">
+      <h4>${t('slipDeductions')}</h4>
+      <div class="slip-line"><span>AOV (${state.settings.rateAOV}%)</span><span class="amt">-${fmt(p.aov)}</span></div>
+      ${state.settings.rateSZF ? `<div class="slip-line"><span>SZF (${state.settings.rateSZF}%)</span><span class="amt">-${fmt(p.szf)}</span></div>` : ''}
+      <div class="slip-line"><span>${t('slipWageTaxOn')} ${fmt(p.taxable)})</span><span class="amt">-${fmt(p.wageTax)}</span></div>
+      ${p.otherDeduction ? `<div class="slip-line"><span>${t('slipOtherDeduction')}</span><span class="amt">-${fmt(p.otherDeduction)}</span></div>` : ''}
+    </div>
+    <div class="slip-line total"><span>${t('slipNetPay')}</span><span class="amt">${fmt(p.net)}</span></div>
+    <div class="slip-actions">
+      <button class="btn btn-primary" onclick="window.print()">${t('btnPrint')}</button>
+      <button class="btn btn-ghost" onclick="closeSlip()">${t('btnClose')}</button>
+    </div>
+  `;
+  document.getElementById('slipOverlay').classList.remove('hidden');
+}
+function closeSlip(){
+  document.getElementById('slipOverlay').classList.add('hidden');
+}
+
+// ---------- Import / Export ----------
+function exportData(){
+  saveSettingsFromInputs();
+  const blob = new Blob([JSON.stringify(Object.assign({lang}, state), null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const label = (state.companyName || 'payroll').replace(/[^a-z0-9]+/gi,'-').toLowerCase();
+  a.href = url;
+  a.download = `${label}-${state.payPeriod}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function importData(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e=>{
+    try{
+      const loaded = JSON.parse(e.target.result);
+      state = Object.assign(state, loaded);
+      if(loaded.lang) lang = loaded.lang;
+      hydrateInputs();
+      applyStaticText();
+      renderAll();
+    }catch(err){
+      alert(t('importError'));
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function exportCSV(){
+  let lines = [[t('colEmployee'),t('fPosition'),t('fType'),t('fNationality'),t('fAddress'),t('fPhone'),t('fDOB'),t('fIDNumber'),t('fPaymentMethod'),t('fBankName'),t('fBankAccount'),t('colGross'),t('colSS'),t('colTaxable'),t('colTax'),t('colOther'),t('colNet')].join(',')];
+  state.employees.forEach(emp=>{
+    const p = computePayslip(emp);
+    lines.push([emp.name, emp.position, emp.type, emp.nationality, emp.address, emp.phone, emp.dob, emp.idNumber, emp.paymentMethod, emp.bankName, emp.bankAccount, p.gross.toFixed(2), p.socialSecurity.toFixed(2), p.taxable.toFixed(2), p.wageTax.toFixed(2), p.otherDeduction.toFixed(2), p.net.toFixed(2)]
+      .map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
+  });
+  const blob = new Blob([lines.join('\n')], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const label = (state.companyName || 'payroll').replace(/[^a-z0-9]+/gi,'-').toLowerCase();
+  a.href = url;
+  a.download = `${label}-${state.payPeriod}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function hydrateInputs(){
+  document.getElementById('companyName').value = state.companyName || '';
+  document.getElementById('payPeriod').value = state.payPeriod || '';
+  document.getElementById('taxFreeAllowance').value = state.settings.taxFreeAllowance;
+  document.getElementById('profExpense').value = state.settings.profExpense;
+  document.getElementById('rateAOV').value = state.settings.rateAOV;
+  document.getElementById('rateSZF').value = state.settings.rateSZF;
+}
+
+// ---------- Init ----------
+applyStaticText();
+hydrateInputs();
+renderAll();
+</script>
+</body>
+</html>
