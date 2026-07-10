@@ -1080,7 +1080,45 @@ function hydrateInputs(){
   document.getElementById('rateAOV').value = state.settings.rateAOV;
   document.getElementById('rateSZF').value = state.settings.rateSZF;
 }
+<script>
+// --- CURSOR FOCUS FIX ---
+// This intercepts the render function to remember and restore your typing position
+(function() {
+    const originalRender = window.renderAll;
+    if (typeof originalRender === 'function') {
+        window.renderAll = function(...args) {
+            // 1. Remember what you were typing in and where the cursor was
+            const activeElement = document.activeElement;
+            const activeId = activeElement ? activeElement.id : null;
+            const start = activeElement && 'selectionStart' in activeElement ? activeElement.selectionStart : null;
+            const end = activeElement && 'selectionEnd' in activeElement ? activeElement.selectionEnd : null;
 
+            // 2. Run the original render code that updates the screen
+            originalRender.apply(this, args);
+
+            // 3. Put the cursor exactly back where it belongs
+            if (activeId) {
+                const inputToFocus = document.getElementById(activeId);
+                if (inputToFocus) {
+                    inputToFocus.focus();
+                    if (start !== null && end !== null) {
+                        inputToFocus.setSelectionRange(start, end);
+                    }
+                }
+            }
+        };
+    }
+})();
+// -------------------------
+</script>
+
+// ---------- Init ---------- 
+applyStaticText(); 
+hydrateInputs(); 
+renderAll(); 
+</script> 
+</body> 
+</html>
 // ---------- Init ----------
 applyStaticText();
 hydrateInputs();
